@@ -19,13 +19,13 @@ class MockForceRequest implements ForceRequest {
    Completer _asyncCallCompleter;
    Intl locale;
 
-   MockForceRequest({this.postData: "test"}) {
+   MockForceRequest({this.postData = "test"}) {
      path_variables = new Map<String, String>();
      _asyncCallCompleter = new Completer();
      request = new MockHttpRequest();
    }
 
-   List header(String name) => new List();
+   List<String> header(String name) => new List();
 
    bool accepts(String type) => true;
 
@@ -54,7 +54,7 @@ class MockForceRequest implements ForceRequest {
      return new HttpHeadersWrapper(this.request.headers);
    }
 
-   Future<dynamic> getPostData({ bool usejson: true }) {
+   Future<dynamic> getPostData({ bool usejson = true }) {
      Completer<dynamic> completer = new Completer<dynamic>();
      completer.complete(postData);
 
@@ -67,7 +67,7 @@ class MockForceRequest implements ForceRequest {
        return c.future;
      }
 
-   Future<Map<String, String>> getPostParams({ Encoding enc: utf8 }) {
+   Future<Map<String, String>> getPostParams({ Encoding enc = utf8 }) {
      Completer c = new Completer();
      c.complete(postParams);
      return c.future;

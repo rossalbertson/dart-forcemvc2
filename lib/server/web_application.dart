@@ -16,15 +16,15 @@ class WebApplication extends SimpleWebServer with ServingFiles {
 
   ControllerHandler _notFound;
 
-  WebApplication({host: "127.0.0.1",
-             port: 8080,
-             wsPath: '/ws',
-             staticFiles: '../static/',
-             clientFiles: '../build/web/',
-             clientServe: true,
-             this.views: "../views/",
+  WebApplication({host = "127.0.0.1",
+             port = 8080,
+             wsPath = '/ws',
+             staticFiles = '../static/',
+             clientFiles = '../build/web/',
+             clientServe = true,
+             this.views ="../views/",
              startPage,
-             cors:true}) :
+             cors = true}) :
                super(host, port, wsPath, staticFiles,
                      clientFiles, clientServe) {
     if (startPage!=null) { static("/", startPage); };
@@ -50,7 +50,7 @@ class WebApplication extends SimpleWebServer with ServingFiles {
            } else {
 
              Uri location = securityContext.redirectUri(req);
-             req.response.redirect(location, status: HttpStatus.MOVED_PERMANENTLY);
+             req.response.redirect(location, status: HttpStatus.movedPermanently);
            }
          });
        });
@@ -69,7 +69,7 @@ class WebApplication extends SimpleWebServer with ServingFiles {
              } else {
                SecurityContextHolder sch = ApplicationContext.getBeanByType(SecurityContextHolder);
                Uri location = sch.redirectUri(req);
-               req.response.redirect(location, status: HttpStatus.MOVED_PERMANENTLY);
+               req.response.redirect(location, status: HttpStatus.movedPermanently);
              }
            });
       }
@@ -164,7 +164,7 @@ class WebApplication extends SimpleWebServer with ServingFiles {
   void _resolveView(String view, HttpRequest req, Model model) {
     if (view.startsWith("redirect:")) {
       Uri location = Uri.parse(view.substring(9));
-      req.response.redirect(location, status: HttpStatus.MOVED_TEMPORARILY);
+      req.response.redirect(location, status: HttpStatus.movedTemporarily);
     } else {
       _send_template(req, model, view);
     }
