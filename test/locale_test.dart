@@ -1,18 +1,21 @@
+import 'package:intl/intl.dart';
+import 'package:locales/locales.dart';
 import 'package:test/test.dart';
-import 'package:forcemvc/force_mvc.dart';
+import 'package:forcemvc2/force_mvc2.dart';
 
 main() {  
   // First tests!  
-  var locale = Locale.ENGLISH;
+//  var locale = "en";
   
   test('test basic locale', () {
       expect(locale.toString(), "en");
   });
   
   // "en", "de_DE", "_GB", "en_US_WIN", "fr__MAC"
-  test('test locale parsing en', () {    
-    Locale locale = Locale.parseString("en");
+  test('test locale parsing en', () {
+    var locale = Locale.en_US;
     expect(locale.getLanguage(), "en");
+
   });
   
   test('test locale parsing de_DE', () {    

@@ -157,7 +157,7 @@ class WebApplication extends SimpleWebServer with ServingFiles {
   }
 
   void _send_json(rawData, HttpRequest req) {
-    String data = JSON.encode(rawData);
+    String data = json.encode(rawData);
     _send_response(req.response, new ContentType("application", "json", charset: "utf-8"), data);
   }
 

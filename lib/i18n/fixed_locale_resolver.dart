@@ -9,19 +9,19 @@ class FixedLocaleResolver extends AbstractLocaleResolver {
    * Create a FixedLocaleResolver that exposes the given locale.
    * @param locale the locale to expose
    */
-  FixedLocaleResolver(Locale locale) {
+  FixedLocaleResolver(Intl locale) {
     setDefaultLocale(locale);
   }
 
-  Locale resolveLocale(ForceRequest request) {
-    Locale locale = getDefaultLocale();
+  Intl resolveLocale(ForceRequest request) {
+    Intl locale = getDefaultLocale();
     if (locale == null) {
-      locale = Locale.defaultLocale;
+      locale = new Intl(Intl.defaultLocale);
     }
     return locale;
   }
 
-  void setLocale(ForceRequest request, Locale locale) {
+  void setLocale(ForceRequest request, covariant Intl locale) {
     throw new UnsupportedError(
         "Cannot change fixed locale - use a different locale resolution strategy");
   }

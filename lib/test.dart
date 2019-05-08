@@ -1,7 +1,7 @@
 library dart_force_mvc_unittest_lib;
 
-import 'package:mock/mock.dart';
-import 'package:forcemvc/force_mvc.dart';
+import 'package:mockito/mockito.dart';
+import 'package:forcemvc2/force_mvc2.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -17,7 +17,7 @@ class MockForceRequest implements ForceRequest {
    HttpRequest request;
    Map<String, String> path_variables;
    Completer _asyncCallCompleter;
-   Locale locale;
+   Intl locale;
 
    MockForceRequest({this.postData: "test"}) {
      path_variables = new Map<String, String>();
@@ -67,7 +67,7 @@ class MockForceRequest implements ForceRequest {
        return c.future;
      }
 
-   Future<Map<String, String>> getPostParams({ Encoding enc: UTF8 }) {
+   Future<Map<String, String>> getPostParams({ Encoding enc: utf8 }) {
      Completer c = new Completer();
      c.complete(postParams);
      return c.future;

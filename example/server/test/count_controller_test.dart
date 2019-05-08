@@ -1,6 +1,7 @@
-import 'package:unittest/unittest.dart';
-import 'package:forcemvc/force_mvc.dart';
-import 'package:forcemvc/test.dart';
+//import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
+import 'package:forcemvc2/force_mvc2.dart';
+import 'package:forcemvc2/test.dart';
 import '../server.dart';
 
 main() {  

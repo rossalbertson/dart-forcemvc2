@@ -1,18 +1,30 @@
-name: forcemvc
-version: 0.8.5
+name: forcemvc2
+version: 0.2.0
 author: Joris Hermans <hermansj@gmail.com>
-description: A serverside web mvc framework with templates
-homepage: https://github.com/ForceUniverse/dart-forcemvc
+description: A serverside web mvc framework with templates (ported to Dart 2 by Ross Albertson)
+homepage: https://github.com/rossalbertson/dart-forcemvc2
 dependencies:
+  path: any
   http_server: '>=0.9.0 <0.10.0'
   logging: '>=0.11.0 <0.12.0'
-  route: '>=0.4.0 <0.5.0'
-  mustache4dart: '>=1.0.0 <1.1.0'
-  wired: '>=0.4.5 <0.4.6'
-  locale: '>=0.1.1+2 <0.1.2'
-  jsonify: '>=0.0.1 <0.0.2'
+#  route: '>=0.4.0 <0.5.0'
+#  route_provider: any
+  route2: any
+#    path: '../route2'
+#  mustache4dart: '>=1.0.0 <1.1.0'
+  mustache4dart2: ^0.1.0
+#    path: '../mustache4dart2'
+#  wired: '>=0.4.5 <0.4.6'
+  wired2: any
+#   path: '../wired2'
+#  locale: '>=0.1.1+2 <0.1.2'
+  intl: ^0.15.8
+  locales: any
+#  jsonify: '>=0.0.1 <0.0.2'
 dev_dependencies:
-  test: '>=0.12.1 <0.13.0'
-  mock: '>=0.11.0 <0.11.1'
+  test: ^1.0.0
+#  mock: '>=0.11.0 <0.11.1'
+  mockito: ^4.0.0
 environment:
-  sdk: '>=1.9.0 <2.0.0'
+#  sdk: '>=1.9.0 <2.0.0'
+  sdk: '>=2.0.0 <3.0.0'

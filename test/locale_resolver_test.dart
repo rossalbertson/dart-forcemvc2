@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:forcemvc/force_mvc.dart';
+import 'package:forcemvc2/force_mvc2.dart';
 
 main() {
   // First tests!  
@@ -8,7 +8,7 @@ main() {
   test("test locale resolving", () {
       AcceptHeaderLocaleResolver lr = new AcceptHeaderLocaleResolver();
 
-      Locale locale = lr.resolveLocaleWithHeader(accept_header_string);
+      Intl locale = lr.resolveLocaleWithHeader(accept_header_string);
 
       expect("en_CA", locale.toString());
   });

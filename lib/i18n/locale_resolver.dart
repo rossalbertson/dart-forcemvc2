@@ -18,7 +18,7 @@ abstract class LocaleResolver {
    * @param request the request to resolve the locale for
    * @return the current locale (never <code>null</code>)
    */
-  Locale resolveLocale(ForceRequest request);
+  Intl resolveLocale(ForceRequest request);
 
   /**
    * Set the current locale to the given one.
@@ -27,6 +27,6 @@ abstract class LocaleResolver {
    * @throws UnsupportedOperationException if the LocaleResolver implementation
    * does not support dynamic changing of the theme
    */
-  void setLocale(ForceRequest request, Locale locale);
+  void setLocale(ForceRequest request, Intl locale);
 
 }

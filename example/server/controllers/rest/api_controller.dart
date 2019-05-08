@@ -1,6 +1,7 @@
 part of example_forcedart;
 
-class Book extends Object with Jsonify {
+//class Book extends Object with Jsonify {
+class Book {
   Book(this.author, this.title);
   String author;
   String title;

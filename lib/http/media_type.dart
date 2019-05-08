@@ -193,11 +193,11 @@ class MediaType extends MimeType {
 		return new MediaType(type.getType(), subtype: type.getSubtype(), parameters: type.getParameters());
   }
 
-	bool includes(MediaType other) {
+	bool includes(covariant MediaType other) {
 		return super.includes(other);
 	}
 
-	bool isCompatibleWith(MediaType other) {
+	bool isCompatibleWith(covariant MediaType other) {
 		return super.isCompatibleWith(other);
 	}
 

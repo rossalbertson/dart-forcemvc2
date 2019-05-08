@@ -8,14 +8,14 @@ Serverside MVC based implementation for Dart. Easy to setup and part of the dart
 
 #### Introduction ####
 
-Dart ForceMVC is a dartlang webframework, with a lot of similarities to java spring mvc
+Dart ForceMVC is a dartlang web framework, with a lot of similarities to java spring mvc
 
-First of all you need to setup a webserver:
+First of all you need to setup a web server:
 
 ```dart
 library x;
-import 'package:wired/wired.dart';
-import 'package:forcemvc/force_mvc.dart';
+import 'package:wired2/wired2.dart';
+import 'package:forcemvc2/force_mvc2.dart';
 
 part 'controllers/x_controller.dart';
 
@@ -26,7 +26,7 @@ main() {
 }
 ```
 
-And then ofcource we need to create our controller.
+And then of course we need to create our controller.
 
 ```dart
 part of x;
@@ -142,7 +142,7 @@ In the controller you can have asynchronous methods to handle for example POST m
 
 On the ForceRequest object you have a method .async and his value is the return value that matters for the req.
 
-When a method is asynchrounous you must return req.asyncFuture.
+When a method is asynchronous you must return req.asyncFuture.
 
 This is an example how you can use it.
 

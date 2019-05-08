@@ -14,7 +14,7 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
    */
   final String DEFAULT_COOKIE_NAME = "FORCE.LOCALE";
 
-  Locale defaultLocale;
+  Intl defaultLocale;
   
   CookieHolderManager cookieManager = new CookieHolderManager();
 
@@ -25,7 +25,7 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
   /**
    * Set a fixed Locale that this resolver will return if no cookie found.
    */
-  void setDefaultLocale(Locale defaultLocale) {
+  void setDefaultLocale(Intl defaultLocale) {
     this.defaultLocale = defaultLocale;
   }
 
@@ -33,18 +33,18 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
    * Return the fixed Locale that this resolver will return if no cookie found,
    * if any.
    */
-  Locale getDefaultLocale() {
+  Intl getDefaultLocale() {
     return this.defaultLocale;
   }
 
 
-  Locale resolveLocale(ForceRequest request) {
+  Intl resolveLocale(ForceRequest request) {
     // Retrieve and parse cookie value.
     Cookie cookie = cookieManager.getCookie(request.request);
     if (cookie != null) {
         // ... todo for see implementation
-        Locale locale = Locale.parseString(cookie.value); //StringUtils.parseLocaleString(cookie.value); How will I parse the cookie to a locale
-          
+//        Intl locale = Intl.parseString(cookie.value); //StringUtils.parseLocaleString(cookie.value); How will I parse the cookie to a locale
+  Intl locale = new Intl(cookie.value);
         if (locale != null) {
             return locale;
         }
@@ -53,7 +53,7 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
     return determineDefaultLocale(request);
   }
 
-  void setLocale(ForceRequest request, Locale locale) {
+  void setLocale(ForceRequest request, Intl locale) {
     if (locale != null) {
       cookieManager.addCookie(request.request.response, locale.toString());
     } else {
@@ -71,10 +71,10 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
    * @param request the request to resolve the locale for
    * @return the default locale
    */
-  Locale determineDefaultLocale(ForceRequest request) {
-    Locale defaultLocale = getDefaultLocale();
+  Intl determineDefaultLocale(ForceRequest request) {
+    Intl defaultLocale = getDefaultLocale();
     if (defaultLocale == null) {
-      defaultLocale = Locale.defaultLocale;
+      defaultLocale = new Intl(Intl.defaultLocale);
     }
     return defaultLocale;
   }

@@ -4,8 +4,8 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:math';
 import 'package:logging/logging.dart';
-import 'package:forcemvc/force_mvc.dart';
-import 'package:wired/wired.dart';
+import 'package:forcemvc2/force_mvc2.dart';
+import 'package:wired2/wired2.dart';
 
 part 'controllers/post_controller.dart';
 part 'controllers/login_controller.dart';
@@ -64,8 +64,8 @@ void main() {
 class OwnConfig {
 
   @Bean
-  LocaleResolver localeResolver() {
-     return new FixedLocaleResolver(Locale.ITALY);
+  LocaleResolver localeResolver(Intl locale) {
+     return new FixedLocaleResolver(locale);
   }
 
 }

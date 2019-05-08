@@ -44,7 +44,7 @@ abstract class ForceViewRender {
       if (servingAssistent!=null) {
         try {
            Stream<List<int>> inputStream = await servingAssistent.read(clientFiles, "$view.html");
-           var template = await inputStream.transform(UTF8.decoder).first;
+           var template = await inputStream.transform(utf8.decoder).first;
            result = _render_impl(template, model);       
         } catch(e) {
           log.severe("The '$view' can't be resolved."); 

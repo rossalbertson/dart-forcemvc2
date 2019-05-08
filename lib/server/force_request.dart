@@ -5,7 +5,9 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
   HttpRequest request;
   Map<String, String> path_variables;
   Completer _asyncCallCompleter;
-  Locale locale;
+  Intl locale;
+
+  
 
   ForceRequest._();
 
@@ -17,7 +19,8 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
   List<String> header(String name) => request.headers[name.toLowerCase()];
 
   bool accepts(String type) =>
-      request.headers['accept'].where((name) => name.split(',').indexOf(type) ).length > 0;
+      request.headers['accept'].where((name) => name.split(',').indexOf(type) > 0).length > 0;
+
 
   bool isMime(String type) =>
       request.headers['content-type'].where((value) => value == type).isNotEmpty;
@@ -58,7 +61,7 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
       // Return the data back to the client.
       String dataOnAString = new String.fromCharCodes(buffer);
 
-      var package = usejson ? JSON.decode(dataOnAString) : dataOnAString;
+      var package = usejson ? json.decode(dataOnAString) : dataOnAString;
       completer.complete(package);
     });
     return completer.future;
@@ -72,10 +75,10 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
       return c.future;
     }
 
-  Future<Map<String, String>> getPostParams({ Encoding enc: UTF8 }) {
-    Completer c = new Completer();
+  Future<Map<String, String>> getPostParams({ Encoding enc: utf8 }) {
+    Completer c = new Completer<Map<String, String>>();
     this.getBody().listen((content) {
-      final postParams = new Map.fromIterable(
+      final Map<String, String> postParams = new Map.fromIterable(
           content.split("&").map((kvs) => kvs.split("=")),
           key: (kv) => Uri.decodeQueryComponent(kv[0], encoding: enc),
           value: (kv) => Uri.decodeQueryComponent(kv[1], encoding: enc)

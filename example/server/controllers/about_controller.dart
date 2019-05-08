@@ -10,7 +10,7 @@ class AboutController {
   String description;
 
   @RequestMapping(value: "/test/about/")
-  String aboutPage(req, Locale locale, Model model) {
+  String aboutPage(req, Intl locale, Model model) {
     model.addAttribute("name", name);
     model.addAttribute("description", description);
     model.addAttribute("locale", locale.toString());

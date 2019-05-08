@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:forcemvc/force_mvc.dart';
-import 'package:route/server.dart' show UrlPattern, Router;
+import 'package:forcemvc2/force_mvc2.dart';
+import 'package:route2/server.dart' show UrlPattern, Router;
 
 main() {
   // First tests!

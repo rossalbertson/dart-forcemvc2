@@ -35,7 +35,7 @@ class ServingAssistent {
           return new Future.error(error);
         });
   }
-
+/*
   Future serveFromFile(HttpRequest request, String path) {
     // Check if the request path is pointing to a static resource.
     Uri fileUri = Platform.script.resolve(path);
@@ -57,6 +57,25 @@ class ServingAssistent {
           }
         }
     });
+  }
+*/
+  Future serveFromFile(HttpRequest request, String path) async {
+    Uri fileUri = Platform.script.resolve(path);
+    File file = new File(fileUri.toFilePath());
+    bool exists = await file.exists();
+    if (exists) {
+      return vd.serveFile(file, request);
+    } else {
+      path = path.replaceFirst("/build", "");
+      fileUri = Platform.script.resolve(path);
+      file = new File(fileUri.toFilePath());
+      if (file.existsSync()) {
+        return vd.serveFile(file, request);
+      } else {
+        var error = new AssistentError("Unable to serve form file to 'pub serve' for '${request.uri}'");
+        return new Future.error(error);
+      }
+    }
   }
 
   Future<Stream<List<int>>> readFromPub(String path) {
