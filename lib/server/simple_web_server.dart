@@ -27,7 +27,7 @@ class SimpleWebServer {
 
   void init() {
     if (host != null) {
-      this.bind_address = host;
+      this.bind_address = new InternetAddress("$host");
     }
 
     if(clientServe == true) {

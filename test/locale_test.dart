@@ -14,6 +14,7 @@ main() {
   // "en", "de_DE", "_GB", "en_US_WIN", "fr__MAC"
   test('test locale parsing en', () {
     var locale = Locale.en_US;
+
     expect(locale.getLanguage(), "en");
 
   });

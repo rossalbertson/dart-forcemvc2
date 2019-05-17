@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:logging/logging.dart';
 import 'package:forcemvc2/force_mvc2.dart';
 import 'package:wired2/wired2.dart';
+//import 'package:locales/locales.dart';
 
 part 'controllers/post_controller.dart';
 part 'controllers/login_controller.dart';
@@ -37,7 +38,7 @@ void main() {
   WebApplication webApp = new WebApplication(host: "127.0.0.1",
                                    port: port,
                                    staticFiles: '../client/static/',
-                                   clientFiles: '../client/build/web/',
+                                   clientFiles: '../client/build/',
                                    clientServe: serveClient,
                                    views: "views/");
   // register yaml files
@@ -60,12 +61,13 @@ void main() {
   webApp.start(fallback: randomPortFallback);
 }
 
+/*
 @Config
 class OwnConfig {
 
   @Bean
-  LocaleResolver localeResolver(Intl locale) {
-     return new FixedLocaleResolver(locale);
+  LocaleResolver localeResolver(Locale locale) {
+     return new FixedLocaleResolver(new Intl("$locale"));
   }
 
-}
+}*/
