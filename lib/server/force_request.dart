@@ -67,7 +67,7 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
     return completer.future;
   }
 
-  Future<Map<String, String>> getPostRawData() {
+  Future<dynamic> getPostRawData() { // used to be Future<Map<String, String>>
       Completer c = new Completer();
       this.getBody().listen((content) {
         c.complete(content);
@@ -75,7 +75,7 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
       return c.future;
     }
 
-  Future<Map<String, String>> getPostParams({ Encoding enc: utf8 }) {
+/*  Future<Map<String, String>> getPostParams({ Encoding enc: utf8 }) {
     Completer c = new Completer<Map<String, String>>();
     this.getBody().listen((content) {
       final Map<String, String> postParams = new Map.fromIterable(
@@ -86,6 +86,34 @@ class ForceRequest implements HttpInputMessage, HttpOutputMessage {
       c.complete(postParams);
     });
     return c.future;
+  } */
+
+  Future getPostParams({Encoding enc=utf8}) {
+      Map myParams = new Map();
+    Completer c = new Completer();
+    this.getBody().listen((content) {
+      List x = content.split("&");
+       for (String atom in x) {
+      List particle = atom.split("=");
+      String key = Uri.decodeQueryComponent(particle[0], encoding: enc);
+      String value = Uri.decodeQueryComponent(particle[1], encoding: enc);
+      if (key.endsWith("[]")) {
+        key = key.replaceFirst("[]", "");
+      if (myParams.containsKey(key)) {
+          (myParams[key] as List).add(value);
+      } else {
+        myParams[key] = new List();
+        myParams[key].add(value);
+      }
+      
+      } else {
+      myParams[key] = value;
+      }
+    }
+  c.complete(myParams);
+    });
+    return c.future;
+
   }
 
   void async(value) {

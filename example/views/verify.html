@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        <h2>{{params.title}}</h2>
+
+        {{^ params.format}} 
+        <h3>Empty format list</h3> 
+        {{/ params.format}}
+
+        <h3>
+        Formats: {{# params.format}} <!-- iterate through format list -->
+        {{ . }}, 
+        {{/ params.format}}
+        </h3>
+
+
+        
+
+    </body>
+</html>

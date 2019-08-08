@@ -22,7 +22,7 @@ class WebApplication extends SimpleWebServer with ServingFiles {
              staticFiles = '../static/',
              clientFiles = '../build/web/',
              clientServe = true,
-             this.views ="../views/",
+             this.views ="../views/", 
              startPage,
              cors = true}) :
                super(host, port, wsPath, staticFiles,
