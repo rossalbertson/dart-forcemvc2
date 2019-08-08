@@ -15,7 +15,7 @@ import 'package:path/path.dart' show normalize;
 
 import 'package:mustache4dart2/mustache4dart2.dart';
 
-//import 'package:mirrorme2/mirrorme2.dart';
+import 'package:mirrorme2/mirrorme2.dart';
 import 'package:wired2/wired2.dart';
 
 //import 'package:locale/locale.dart';
