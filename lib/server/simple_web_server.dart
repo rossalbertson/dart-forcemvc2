@@ -16,12 +16,8 @@ class SimpleWebServer {
 
   Completer _completer = new Completer.sync();
 
-  SimpleWebServer(this.host,
-                  this.port,
-                  this.wsPath,
-                  this.staticFiles,
-                  this.clientFiles,
-                  this.clientServe) {
+  SimpleWebServer(this.host, this.port, this.wsPath, this.staticFiles,
+      this.clientFiles, this.clientServe) {
     init();
   }
 
@@ -30,21 +26,22 @@ class SimpleWebServer {
       this.bind_address = new InternetAddress("$host");
     }
 
-    if(clientServe == true) {
-       String clientFilesPath = Platform.script.resolve(clientFiles).toFilePath();
+    if (clientServe == true) {
+      String clientFilesPath =
+          Platform.script.resolve(clientFiles).toFilePath();
 
-       _exists(clientFilesPath);
+      _exists(clientFilesPath);
     }
   }
 
   void _exists(dir) {
-     try {
-       if (!new Directory(dir).existsSync()) {
-          log.severe("The '$dir' directory was not found.");
-       }
-     } on FileSystemException {
-       log.severe("The '$dir' directory was not found.");
-     }
+    try {
+      if (!new Directory(dir).existsSync()) {
+        log.severe("The '$dir' directory was not found.");
+      }
+    } on FileSystemException {
+      log.severe("The '$dir' directory was not found.");
+    }
   }
 
   /**
@@ -57,7 +54,7 @@ class SimpleWebServer {
     HttpServer.bind(bind_address, port).then((server) {
       _onStartComplete(server, handleWs);
     }).catchError((e) {
-      if (fallback==null) {
+      if (fallback == null) {
         var error = _errorOnStart(e);
         return new Future.error(error);
       } else {
@@ -83,21 +80,26 @@ class SimpleWebServer {
      *
      */
 
-  Future startSecure({WebSocketHandler handleWs: null, SecurityContext context, bool requestClientCertificate: false,
-    int backlog: 0}) {
-      HttpServer.bindSecure(bind_address, port, context,
-          requestClientCertificate: requestClientCertificate,
-          backlog: backlog).then((server) {
-        _onStartComplete(server, handleWs);
-      }).catchError((e) {
-        var error = _errorOnStart(e);
-        return new Future.error(error);
-      });
+  Future startSecure(
+      {WebSocketHandler handleWs: null,
+      SecurityContext context,
+      bool requestClientCertificate: false,
+      int backlog: 0}) {
+    HttpServer.bindSecure(bind_address, port, context,
+            requestClientCertificate: requestClientCertificate,
+            backlog: backlog)
+        .then((server) {
+      _onStartComplete(server, handleWs);
+    }).catchError((e) {
+      var error = _errorOnStart(e);
+      return new Future.error(error);
+    });
 
-      return _completer.future;
-    }
+    return _completer.future;
+  }
 
-  void _onStartComplete(Stream<HttpRequest> incoming, [WebSocketHandler handleWs]) {
+  void _onStartComplete(Stream<HttpRequest> incoming,
+      [WebSocketHandler handleWs]) {
     _onStart(incoming, handleWs);
     _completer.complete(const []);
   }
@@ -105,7 +107,8 @@ class SimpleWebServer {
   Error _errorOnStart(e) {
     log.warning("Could not startup the web server ... $e");
     log.warning("Is your port already in use?");
-    return new WebApplicationStartError("Unable to start with '${host}' - '${port}': $e");
+    return new WebApplicationStartError(
+        "Unable to start with '${host}' - '${port}': $e");
   }
 
   Stream<HttpRequest> serve(String name) {
@@ -113,32 +116,33 @@ class SimpleWebServer {
   }
 
   void setupConsoleLog([Level level = Level.INFO]) {
-      Logger.root.level = level;
-      Logger.root.onRecord.listen((LogRecord rec) {
-        if (rec.level >= Level.SEVERE) {
-          var stack = rec.stackTrace != null ? rec.stackTrace : "";
-          print('${rec.level.name}: ${rec.time}: ${rec.message} - ${rec.error} $stack');
-        } else {
-          print('${rec.level.name}: ${rec.time}: ${rec.message}');
-        }
-      });
+    Logger.root.level = level;
+    Logger.root.onRecord.listen((LogRecord rec) {
+      if (rec.level >= Level.SEVERE) {
+        var stack = rec.stackTrace != null ? rec.stackTrace : "";
+        print(
+            '${rec.level.name}: ${rec.time}: ${rec.message} - ${rec.error} $stack');
+      } else {
+        print('${rec.level.name}: ${rec.time}: ${rec.message}');
+      }
+    });
   }
 
   _onStart(Stream<HttpRequest> incoming, [WebSocketHandler handleWs]) {}
 }
 
 class WebApplicationStartError extends Error {
-    final message;
+  final message;
 
-    /** The [message] describes the erroneous argument. */
-    WebApplicationStartError([this.message]);
+  /** The [message] describes the erroneous argument. */
+  WebApplicationStartError([this.message]);
 
-    String toString() {
-      if (message != null) {
-        return "WebApplication start error: $message";
-      }
-      return "WebApplication start error";
+  String toString() {
+    if (message != null) {
+      return "WebApplication start error: $message";
     }
+    return "WebApplication start error";
+  }
 }
 
 /*

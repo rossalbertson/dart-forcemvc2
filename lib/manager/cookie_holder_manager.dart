@@ -1,22 +1,20 @@
 part of dart_force_mvc_lib;
 
 class CookieHolderManager {
-  
   static final Logger logger = new Logger('CookieManager');
-  
+
   /**
    * Default path that cookies will be visible to: "/", i.e. the entire server.
    */
   static final String DEFAULT_COOKIE_PATH = "/";
-  
+
   String cookiePath = DEFAULT_COOKIE_PATH;
-  
+
   int cookieMaxAge;
   bool cookieSecure;
   String cookieName;
   String cookieDomain;
-  
-  
+
   /**
    * Add a cookie with the given value to the response,
    * using the cookie descriptor settings of this generator.
@@ -35,7 +33,8 @@ class CookieHolderManager {
       cookie.secure = true;
     }
     response.cookies.add(cookie);
-    logger.log(Level.INFO, "Added cookie with name [${cookieName}] and value [${cookieValue}]");
+    logger.log(Level.INFO,
+        "Added cookie with name [${cookieName}] and value [${cookieValue}]");
   }
 
   /**
@@ -67,7 +66,7 @@ class CookieHolderManager {
     cookie.path = cookiePath;
     return cookie;
   }
-  
+
   /**
    * Getting the cookie according to the request and the cookie name.
    * 
@@ -75,15 +74,15 @@ class CookieHolderManager {
    * @return the cookie
    */
   Cookie getCookie(HttpRequest request) {
-      List<Cookie> cookies = request.cookies;
+    List<Cookie> cookies = request.cookies;
 
-      if (cookies != null) {
-        for (Cookie cookie in cookies) {
-          if (cookieName == cookie.name) {
-            return cookie;
-          }
+    if (cookies != null) {
+      for (Cookie cookie in cookies) {
+        if (cookieName == cookie.name) {
+          return cookie;
         }
       }
-      return null;
     }
+    return null;
+  }
 }

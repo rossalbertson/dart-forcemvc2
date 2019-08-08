@@ -8,14 +8,13 @@ part of dart_force_mvc_lib;
  * This is particularly useful for stateless applications without user sessions.
  */
 class CookieLocaleResolver extends AbstractLocaleResolver {
-
   /**
    * The default cookie name used if none is explicitly set.
    */
   final String DEFAULT_COOKIE_NAME = "FORCE.LOCALE";
 
   Intl defaultLocale;
-  
+
   CookieHolderManager cookieManager = new CookieHolderManager();
 
   CookieLocaleResolver() {
@@ -37,19 +36,18 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
     return this.defaultLocale;
   }
 
-
   Intl resolveLocale(ForceRequest request) {
     // Retrieve and parse cookie value.
     Cookie cookie = cookieManager.getCookie(request.request);
     if (cookie != null) {
-        // ... todo for see implementation
+      // ... todo for see implementation
 //        Intl locale = Intl.parseString(cookie.value); //StringUtils.parseLocaleString(cookie.value); How will I parse the cookie to a locale
-  Intl locale = new Intl(cookie.value);
-        if (locale != null) {
-            return locale;
-        }
+      Intl locale = new Intl(cookie.value);
+      if (locale != null) {
+        return locale;
+      }
     }
-    
+
     return determineDefaultLocale(request);
   }
 
@@ -57,7 +55,7 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
     if (locale != null) {
       cookieManager.addCookie(request.request.response, locale.toString());
     } else {
-          // Set request attribute to fallback locale and remove cookie.
+      // Set request attribute to fallback locale and remove cookie.
       cookieManager.removeCookie(request.request.response);
     }
   }
@@ -78,5 +76,4 @@ class CookieLocaleResolver extends AbstractLocaleResolver {
     }
     return defaultLocale;
   }
-
 }

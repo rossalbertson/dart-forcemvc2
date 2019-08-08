@@ -1,9 +1,7 @@
 part of dart_force_mvc_lib;
 
 abstract class AbstractLocaleResolver implements LocaleResolver {
-
   Intl _defaultLocale;
-
 
   /**
    * Set a default Locale that this resolver will return if no other locale found.
@@ -18,5 +16,4 @@ abstract class AbstractLocaleResolver implements LocaleResolver {
   Intl getDefaultLocale() {
     return this._defaultLocale;
   }
-
 }

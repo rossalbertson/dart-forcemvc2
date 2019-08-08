@@ -3,7 +3,7 @@ part of dart_force_mvc_lib;
 class WebApplication extends SimpleWebServer with ServingFiles {
   final Logger log = new Logger('WebApplication');
 
-  bool cors=false;
+  bool cors = false;
   Router router;
   String views;
   ForceRegistry registry;
@@ -16,22 +16,27 @@ class WebApplication extends SimpleWebServer with ServingFiles {
 
   ControllerHandler _notFound;
 
-  WebApplication({host = "127.0.0.1",
-             port = 8080,
-             wsPath = '/ws',
-             staticFiles = '../static/',
-             clientFiles = '../build/web/',
-             clientServe = true,
-             this.views ="../views/", 
-             startPage,
-             cors = true}) :
-               super(host, port, wsPath, staticFiles,
-                     clientFiles, clientServe) {
-    if (startPage!=null) { static("/", startPage); };
-    if(cors==true){ this.responseHooks.add(response_hook_cors); }
+  WebApplication(
+      {host = "127.0.0.1",
+      port = 8080,
+      wsPath = '/ws',
+      staticFiles = '../static/',
+      clientFiles = '../build/web/',
+      clientServe = true,
+      this.views = "../views/",
+      startPage,
+      cors = true})
+      : super(host, port, wsPath, staticFiles, clientFiles, clientServe) {
+    if (startPage != null) {
+      static("/", startPage);
+    }
+    ;
+    if (cors == true) {
+      this.responseHooks.add(response_hook_cors);
+    }
 
     securityContext = new SecurityContextHolder(new NoSecurityStrategy());
-    localeResolver =  new AcceptHeaderLocaleResolver();
+    localeResolver = new AcceptHeaderLocaleResolver();
     exceptionResolver = new SimpleExceptionResolver();
 
     registry = new ForceRegistry(this);
@@ -42,36 +47,37 @@ class WebApplication extends SimpleWebServer with ServingFiles {
   }
 
   void use(Pattern url, ControllerHandler controllerHandler,
-          {method: RequestMethod.GET, List<String> roles}) {
+      {method: RequestMethod.GET, List<String> roles}) {
     _completer.future.whenComplete(() {
-         this.router.serve(url, method: method).listen((HttpRequest req) {
-           if (checkSecurity(req, roles)) {
-             _resolveRequest(req, controllerHandler);
-           } else {
-
-             Uri location = securityContext.redirectUri(req);
-             req.response.redirect(location, status: HttpStatus.movedPermanently);
-           }
-         });
-       });
+      this.router.serve(url, method: method).listen((HttpRequest req) {
+        if (checkSecurity(req, roles)) {
+          _resolveRequest(req, controllerHandler);
+        } else {
+          Uri location = securityContext.redirectUri(req);
+          req.response.redirect(location, status: HttpStatus.movedPermanently);
+        }
+      });
+    });
   }
 
   void static(Pattern url, String name,
-            {method: RequestMethod.GET, List<String> roles}) {
+      {method: RequestMethod.GET, List<String> roles}) {
     bool containsAlreadyStatic = _staticResources.containsKey(url);
     _staticResources[url] = name;
 
     _completer.future.whenComplete(() {
       if (!containsAlreadyStatic) {
-           this.router.serve(url, method: method).listen((HttpRequest req) {
-             if (checkSecurity(req, roles)) {
-               _resolveStatic(req, _staticResources[url]);
-             } else {
-               SecurityContextHolder sch = ApplicationContext.getBeanByType(SecurityContextHolder);
-               Uri location = sch.redirectUri(req);
-               req.response.redirect(location, status: HttpStatus.movedPermanently);
-             }
-           });
+        this.router.serve(url, method: method).listen((HttpRequest req) {
+          if (checkSecurity(req, roles)) {
+            _resolveStatic(req, _staticResources[url]);
+          } else {
+            SecurityContextHolder sch =
+                ApplicationContext.getBeanByType(SecurityContextHolder);
+            Uri location = sch.redirectUri(req);
+            req.response
+                .redirect(location, status: HttpStatus.movedPermanently);
+          }
+        });
       }
     });
   }
@@ -81,17 +87,18 @@ class WebApplication extends SimpleWebServer with ServingFiles {
   }
 
   void _notFoundHandling(HttpRequest request) {
-     super._notFoundHandling(request);
-     if (_notFound!=null) {
-         _resolveRequest(request, _notFound);
-     } else {
-         request.response.close();
-     }
+    super._notFoundHandling(request);
+    if (_notFound != null) {
+      _resolveRequest(request, _notFound);
+    } else {
+      request.response.close();
+    }
   }
 
   bool checkSecurity(HttpRequest req, List<String> roles) {
     if (roles != null) {
-      SecurityContextHolder securityContext = ApplicationContext.getBeanByType(SecurityContextHolder);
+      SecurityContextHolder securityContext =
+          ApplicationContext.getBeanByType(SecurityContextHolder);
       return securityContext.checkAuthorization(req, roles);
     } else {
       return true;
@@ -99,13 +106,13 @@ class WebApplication extends SimpleWebServer with ServingFiles {
   }
 
   void _resolveStatic(HttpRequest req, String name) {
-    if (servingAssistent==null) {
-       log.warning("servingAssistent is not defined!");
+    if (servingAssistent == null) {
+      log.warning("servingAssistent is not defined!");
     } else {
-       servingAssistent.just_serve(req, clientFiles, name).catchError((e) {
-           print(e);
-           _notFoundHandling(req);
-       });
+      servingAssistent.just_serve(req, clientFiles, name).catchError((e) {
+        print(e);
+        _notFoundHandling(req);
+      });
     }
   }
 
@@ -114,7 +121,8 @@ class WebApplication extends SimpleWebServer with ServingFiles {
     ForceRequest forceRequest = new ForceRequest(req);
 
     // check locale
-    if (localeResolver != null) forceRequest.locale = localeResolver.resolveLocale(forceRequest);
+    if (localeResolver != null)
+      forceRequest.locale = localeResolver.resolveLocale(forceRequest);
 
     var result;
 
@@ -131,25 +139,25 @@ class WebApplication extends SimpleWebServer with ServingFiles {
       }
     }
     if (result != null) {
-       // template rendering
-       if (result is String) {
-         _resolveView(result, req, model);
-       } else if (result is Future) {
-          Future future = result;
-          future.then((e) {
-            if (e is String) {
-              _resolveView(e, req, model);
-            } else if (e is! HttpResponse) {
-              model.addAttributeObject(e);
-              _send_json(model.getData(), req);
-            }
-          });
-       } else if (result is ResponseDone) {
-          req.response.close();
-       } else if (result is! HttpResponse) {
-         model.addAttributeObject(result);
-         _send_json(model.getData(), req);
-       }
+      // template rendering
+      if (result is String) {
+        _resolveView(result, req, model);
+      } else if (result is Future) {
+        Future future = result;
+        future.then((e) {
+          if (e is String) {
+            _resolveView(e, req, model);
+          } else if (e is! HttpResponse) {
+            model.addAttributeObject(e);
+            _send_json(model.getData(), req);
+          }
+        });
+      } else if (result is ResponseDone) {
+        req.response.close();
+      } else if (result is! HttpResponse) {
+        model.addAttributeObject(result);
+        _send_json(model.getData(), req);
+      }
     } else {
       _send_json(model.getData(), req);
     }
@@ -158,7 +166,8 @@ class WebApplication extends SimpleWebServer with ServingFiles {
 
   void _send_json(rawData, HttpRequest req) {
     String data = json.encode(rawData);
-    _send_response(req.response, new ContentType("application", "json", charset: "utf-8"), data);
+    _send_response(req.response,
+        new ContentType("application", "json", charset: "utf-8"), data);
   }
 
   void _resolveView(String view, HttpRequest req, Model model) {
@@ -175,19 +184,21 @@ class WebApplication extends SimpleWebServer with ServingFiles {
   }
 
   void _send_template(HttpRequest req, Model model, String view) {
-      this.viewRender.render(view, model.getData()).then((String result) {
-        _send_response(req.response, new ContentType("text", "html", charset: "utf-8"), result);
-      });
+    this.viewRender.render(view, model.getData()).then((String result) {
+      _send_response(req.response,
+          new ContentType("text", "html", charset: "utf-8"), result);
+    });
   }
 
-  void _send_response(HttpResponse response, ContentType contentType, String result) {
-      responseHooks.forEach((ResponseHook responseHook) {
-        responseHook(response);
-      });
-      response
-        ..headers.contentType = contentType
-        ..write(result)
-          ..close();
+  void _send_response(
+      HttpResponse response, ContentType contentType, String result) {
+    responseHooks.forEach((ResponseHook responseHook) {
+      responseHook(response);
+    });
+    response
+      ..headers.contentType = contentType
+      ..write(result)
+      ..close();
   }
 
   /**
@@ -198,7 +209,7 @@ class WebApplication extends SimpleWebServer with ServingFiles {
    * @param optional parameter to handle webSockets
    */
   void requestHandler(HttpRequest request, [WebSocketHandler handleWs]) {
-    if (requestStreamer==null) {
+    if (requestStreamer == null) {
       // initialize all
       requestStreamer = new HttpRequestStreamer();
       _onStartComplete(requestStreamer.stream, handleWs);
@@ -216,21 +227,22 @@ class WebApplication extends SimpleWebServer with ServingFiles {
     // forward them to 'handleWebSocket'.
     if (handleWs != null) {
       Stream<HttpRequest> stream = router.serve(this.wsPath);
-        stream.listen((HttpRequest req) {
+      stream.listen((HttpRequest req) {
 //          stream.transform(new WebSocketTransformer())
 //                    .listen(handleWs);
-          if(WebSocketTransformer.isUpgradeRequest(req)) {
-             WebSocketTransformer.upgrade(req).then((WebSocket ws) {
-                handleWs(ws, req);
-             });
-          }
-        });
+        if (WebSocketTransformer.isUpgradeRequest(req)) {
+          WebSocketTransformer.upgrade(req).then((WebSocket ws) {
+            handleWs(ws, req);
+          });
+        }
+      });
     }
 
     // Serve dart and static files (if not explicitly disabled by clientServe)
     _serveClient(staticFiles, clientFiles, clientServe);
     if (viewRender == null) {
-        viewRender = new MustacheRender(servingAssistent, views, clientFiles, clientServe);
+      viewRender =
+          new MustacheRender(servingAssistent, views, clientFiles, clientServe);
     }
   }
 
@@ -239,29 +251,30 @@ class WebApplication extends SimpleWebServer with ServingFiles {
     securityContext.strategy = strategy;
   }
 
-  void set securityContext(SecurityContextHolder sch)
-                             => ApplicationContext.setBean("securityContextHolder", sch);
+  void set securityContext(SecurityContextHolder sch) =>
+      ApplicationContext.setBean("securityContextHolder", sch);
 
-  SecurityContextHolder get securityContext
-                        => ApplicationContext.getBeanByType(SecurityContextHolder);
+  SecurityContextHolder get securityContext =>
+      ApplicationContext.getBeanByType(SecurityContextHolder);
 
-  void set exceptionResolver(HandlerExceptionResolver handlerExceptionResolver)
-                             => ApplicationContext.setBean("exceptionResolver", handlerExceptionResolver);
+  void set exceptionResolver(
+          HandlerExceptionResolver handlerExceptionResolver) =>
+      ApplicationContext.setBean("exceptionResolver", handlerExceptionResolver);
 
-  HandlerExceptionResolver get exceptionResolver
-                          => ApplicationContext.getBeanByType(HandlerExceptionResolver);
+  HandlerExceptionResolver get exceptionResolver =>
+      ApplicationContext.getBeanByType(HandlerExceptionResolver);
 
-  void set localeResolver(LocaleResolver localeResolver)
-                          => ApplicationContext.setBean("localeResolver", localeResolver);
+  void set localeResolver(LocaleResolver localeResolver) =>
+      ApplicationContext.setBean("localeResolver", localeResolver);
 
-  LocaleResolver get localeResolver
-                            => ApplicationContext.getBeanByType(LocaleResolver);
+  LocaleResolver get localeResolver =>
+      ApplicationContext.getBeanByType(LocaleResolver);
 
-  void set viewRender(ForceViewRender viewRender)
-                      => ApplicationContext.setBean("viewRender", viewRender);
+  void set viewRender(ForceViewRender viewRender) =>
+      ApplicationContext.setBean("viewRender", viewRender);
 
-  ForceViewRender get viewRender
-                      => ApplicationContext.getBeanByType(ForceViewRender);
+  ForceViewRender get viewRender =>
+      ApplicationContext.getBeanByType(ForceViewRender);
 
   void loadValues(String path) => this.registry.loadValues(path);
 }

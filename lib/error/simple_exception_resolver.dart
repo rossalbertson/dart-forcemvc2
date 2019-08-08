@@ -5,12 +5,11 @@ part of dart_force_mvc_lib;
  */
 
 class SimpleExceptionResolver extends HandlerExceptionResolver {
-  
   static final String DEFAULT_EXCEPTION_ATTRIBUTE = "exception";
   static final String DEFAULT_STACKTRACE_ATTRIBUTE = "stacktrace";
   static final String DEFAULT_ERROR_ATTRIBUTE = "error";
-  
-    /**
+
+  /**
      * A simple implementation of the given exception that got thrown during on handler execution.
      * @param request current Force Request, an encapsulated HttpRequest
      * @param ex the exception that got thrown during handler execution
@@ -20,7 +19,7 @@ class SimpleExceptionResolver extends HandlerExceptionResolver {
     model.addAttribute(DEFAULT_EXCEPTION_ATTRIBUTE, ex.toString());
     return null;
   }
-  
+
   /**
     * A simple implementation of the given exception that got thrown during on handler error.
     * @param request current Force Request, an encapsulated HttpRequest
@@ -32,5 +31,4 @@ class SimpleExceptionResolver extends HandlerExceptionResolver {
     model.addAttribute(DEFAULT_STACKTRACE_ATTRIBUTE, er.stackTrace.toString());
     return null;
   }
-  
 }

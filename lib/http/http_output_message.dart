@@ -1,4 +1,5 @@
 part of dart_force_mvc_lib;
+
 /**
  * Represents an HTTP output message, consisting of headers
  * and a writable body.
@@ -10,16 +11,16 @@ part of dart_force_mvc_lib;
  * @since 0.8.0
  */
 abstract class HttpOutputMessage extends HttpMessage {
-
-	/**
+  /**
 	 * Return the headers of this message.
 	 * @return a corresponding HttpHeaders object (never null)
 	 */
-	HttpHeadersWrapper getResponseHeaders() { return null; }
+  HttpHeadersWrapper getResponseHeaders() {
+    return null;
+  }
 
-	/**
+  /**
 	 * Return the body of the message as an output stream.
 	 */
-	IOSink getOutputBody();
-
+  IOSink getOutputBody();
 }

@@ -7,7 +7,6 @@ part of dart_force_mvc_lib;
 const Authentication = const _Authentication();
 
 class _Authentication {
-
   const _Authentication();
 
   List<String> get roles => ["BASIC"];
@@ -34,9 +33,7 @@ class PreAuthorizeIf {
 const Controller = const _Controller();
 
 class _Controller {
-
   const _Controller();
-
 }
 
 /**
@@ -47,9 +44,7 @@ class _Controller {
 const RestController = const _RestController();
 
 class _RestController {
-
   const _RestController();
-
 }
 
 /**
@@ -59,9 +54,7 @@ class _RestController {
 const ControllerAdvice = const _ControllerAdvice();
 
 class _ControllerAdvice {
-
   const _ControllerAdvice();
-
 }
 
 /**
@@ -69,11 +62,9 @@ class _ControllerAdvice {
  *
  */
 class ExceptionHandler {
-
   final Type type;
 
   const ExceptionHandler({this.type});
-
 }
 
 /**
@@ -88,12 +79,10 @@ class ExceptionHandler {
  *
  */
 class ModelAttribute {
-
   final String value;
   const ModelAttribute(this.value);
 
   String toString() => "$value";
-
 }
 
 /**
@@ -105,12 +94,10 @@ class ModelAttribute {
  * */
 
 class PathVariable {
-
   final String value;
   const PathVariable(this.value);
 
   String toString() => "$value";
-
 }
 
 /**
@@ -126,13 +113,11 @@ class PathVariable {
  * */
 
 class RequestMapping {
-
   final String value;
   final String method;
-  const RequestMapping({this.value: "", this.method:"GET"});
+  const RequestMapping({this.value: "", this.method: "GET"});
 
   String toString() => "$value -> $method";
-
 }
 
 /**
@@ -141,14 +126,13 @@ class RequestMapping {
  *
  * */
 class RequestParam {
-
   final String value;
   final String defaultValue;
   final bool required;
-  const RequestParam({this.value: "", this.defaultValue: "", this.required: false});
+  const RequestParam(
+      {this.value: "", this.defaultValue: "", this.required: false});
 
   String toString() => "$value -> - $defaultValue ($required)";
-
 }
 
 /**
@@ -157,13 +141,11 @@ class RequestParam {
  *
  **/
 class ResponseStatus {
-
   final int value;
 
   const ResponseStatus(this.value);
 
   String toString() => "Response statuscode: $value";
-
 }
 
 /**
@@ -173,7 +155,5 @@ class ResponseStatus {
 const ResponseBody = const _ResponseBody();
 
 class _ResponseBody {
-
   const _ResponseBody();
-
 }

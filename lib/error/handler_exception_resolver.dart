@@ -7,7 +7,6 @@ part of dart_force_mvc_lib;
  */
 
 abstract class HandlerExceptionResolver {
-
   /**
    * Try to resolve the given exception that got thrown during on handler execution,
    * returning a String that the viewname or return null if you want to return a json representation.
@@ -27,5 +26,4 @@ abstract class HandlerExceptionResolver {
    */
 
   String resolveError(ForceRequest request, Model model, Error er);
-
 }

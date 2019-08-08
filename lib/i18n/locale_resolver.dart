@@ -11,7 +11,6 @@ part of dart_force_mvc_lib;
  *
  */
 abstract class LocaleResolver {
-
   /**
    * Resolve the current locale via the given request.
    * Should return a default locale as fallback in any case.
@@ -28,5 +27,4 @@ abstract class LocaleResolver {
    * does not support dynamic changing of the theme
    */
   void setLocale(ForceRequest request, Intl locale);
-
 }

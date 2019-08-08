@@ -1,7 +1,6 @@
 part of dart_force_mvc_lib;
 
 class PathAnalyzer {
-
   String _path;
   String route = "";
   String expression = "([^/]+?)";
@@ -33,5 +32,4 @@ class PathAnalyzer {
       }
     }
   }
-
 }

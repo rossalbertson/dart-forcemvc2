@@ -4,7 +4,6 @@ part of dart_force_mvc_lib;
  * Always returns a default locale, implementation of a locale resolver
  */
 class FixedLocaleResolver extends AbstractLocaleResolver {
-
   /**
    * Create a FixedLocaleResolver that exposes the given locale.
    * @param locale the locale to expose
@@ -25,5 +24,4 @@ class FixedLocaleResolver extends AbstractLocaleResolver {
     throw new UnsupportedError(
         "Cannot change fixed locale - use a different locale resolution strategy");
   }
-
 }

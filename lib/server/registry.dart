@@ -1,7 +1,6 @@
 part of dart_force_mvc_lib;
 
 class ForceRegistry {
-
   WebApplication webApplication;
   File _basePath;
   HttpMessageRegulator messageRegulator = new HttpMessageRegulator();
@@ -24,19 +23,26 @@ class ForceRegistry {
 
   void scanning() {
     // scan for controllers
-    var classes = ApplicationContext.addComponents(new Scanner<_Controller>().scan());
+    var classes =
+        ApplicationContext.addComponents(new Scanner<_Controller>().scan());
 
     // scan for restcontrollers
-    var rest_classes = ApplicationContext.addComponents(new Scanner<_RestController>().scan());
+    var rest_classes =
+        ApplicationContext.addComponents(new Scanner<_RestController>().scan());
 
     // scan for controllerAdvicers classes
-    var advisers = ApplicationContext.addComponents(new Scanner<_ControllerAdvice>().scan());
+    var advisers = ApplicationContext.addComponents(
+        new Scanner<_ControllerAdvice>().scan());
 
-    List<MetaDataValue<ModelAttribute>> adviserModels = new List<MetaDataValue<ModelAttribute>>();
-    List<MetaDataValue<ExceptionHandler>> adviserExc = new List<MetaDataValue<ExceptionHandler>>();
+    List<MetaDataValue<ModelAttribute>> adviserModels =
+        new List<MetaDataValue<ModelAttribute>>();
+    List<MetaDataValue<ExceptionHandler>> adviserExc =
+        new List<MetaDataValue<ExceptionHandler>>();
     for (var obj in advisers) {
-      adviserModels.addAll(new MetaDataHelper<ModelAttribute, MethodMirror>().from(obj));
-      adviserExc.addAll(new MetaDataHelper<ExceptionHandler, MethodMirror>().from(obj));
+      adviserModels
+          .addAll(new MetaDataHelper<ModelAttribute, MethodMirror>().from(obj));
+      adviserExc.addAll(
+          new MetaDataHelper<ExceptionHandler, MethodMirror>().from(obj));
     }
 
     /* now register all the controller classes */
@@ -50,42 +56,62 @@ class ForceRegistry {
     }
 
     // Search for interceptors
-    ClassSearcher<HandlerInterceptor> searcher = new ClassSearcher<HandlerInterceptor>();
+    ClassSearcher<HandlerInterceptor> searcher =
+        new ClassSearcher<HandlerInterceptor>();
     List<HandlerInterceptor> interceptorList = searcher.scan();
 
     webApplication.interceptors.addAll(interceptorList);
   }
 
   void register(Object obj) {
-    _register(obj, new List<MetaDataValue<ModelAttribute>>(), new List<MetaDataValue<ExceptionHandler>>());
+    _register(obj, new List<MetaDataValue<ModelAttribute>>(),
+        new List<MetaDataValue<ExceptionHandler>>());
   }
 
-  void _register(Object obj, List<MetaDataValue<ModelAttribute>> adviserModels, List<MetaDataValue<ExceptionHandler>> adviserExc, {bool isRest: false}) {
-    List<MetaDataValue<RequestMapping>> mirrorValues = new MetaDataHelper<RequestMapping, MethodMirror>().from(obj);
-    List<MetaDataValue<ModelAttribute>> mirrorModels = new MetaDataHelper<ModelAttribute, MethodMirror>().from(obj);
+  void _register(Object obj, List<MetaDataValue<ModelAttribute>> adviserModels,
+      List<MetaDataValue<ExceptionHandler>> adviserExc,
+      {bool isRest: false}) {
+    List<MetaDataValue<RequestMapping>> mirrorValues =
+        new MetaDataHelper<RequestMapping, MethodMirror>().from(obj);
+    List<MetaDataValue<ModelAttribute>> mirrorModels =
+        new MetaDataHelper<ModelAttribute, MethodMirror>().from(obj);
     mirrorModels.addAll(adviserModels);
 
     var _ref; //Variable to check null values
 
     // first look if the controller has a @Authentication annotation
-    var roles = (_ref = new AnnotationScanner<_Authentication>().instanceFrom(obj))== null ? null : _ref.roles;
+    var roles = (_ref =
+                new AnnotationScanner<_Authentication>().instanceFrom(obj)) ==
+            null
+        ? null
+        : _ref.roles;
     // then look at PreAuthorizeRoles, when they are defined		     // then look at PreAuthorizeRoles, when they are defined
-    roles = (_ref = new AnnotationScanner<PreAuthorizeRoles>().instanceFrom(obj))== null ? roles : _ref.roles;
+    roles = (_ref =
+                new AnnotationScanner<PreAuthorizeRoles>().instanceFrom(obj)) ==
+            null
+        ? roles
+        : _ref.roles;
 
-    String startPath = (_ref = new AnnotationScanner<RequestMapping>().instanceFrom(obj)) != null ? _ref.value : "";
+    String startPath = (_ref =
+                new AnnotationScanner<RequestMapping>().instanceFrom(obj)) !=
+            null
+        ? _ref.value
+        : "";
 
     for (MetaDataValue mv in mirrorValues) {
       // execute all ! ! !
       PathAnalyzer pathAnalyzer = new PathAnalyzer(mv.object.value);
 
-      UrlPattern urlPattern = new UrlPattern("${startPath}${pathAnalyzer.route}");
+      UrlPattern urlPattern =
+          new UrlPattern("${startPath}${pathAnalyzer.route}");
       this.webApplication.use(urlPattern, (ForceRequest req, Model model) {
         try {
           // prepare model
           model = _prepareModel(model, mirrorModels);
 
           // Has ResponseStatus in metaData?
-          bool hasResponseBody = _hasResponseBody(mv.getOtherMetadata(), req)  || isRest;
+          bool hasResponseBody =
+              _hasResponseBody(mv.getOtherMetadata(), req) || isRest;
 
           // search for path variables
           for (var i = 0; pathAnalyzer.variables.length > i; i++) {
@@ -94,7 +120,8 @@ class ForceRegistry {
             req.path_variables[variableName] = value;
           }
 
-          List positionalArguments = _calculate_positionalArguments(mv, model, req);
+          List positionalArguments =
+              _calculate_positionalArguments(mv, model, req);
           Object obj = _executeFunction(mv, positionalArguments);
 
           if (hasResponseBody) {
@@ -105,11 +132,11 @@ class ForceRegistry {
           } else {
             return obj;
           }
-
         } catch (e, stackTrace) {
           // Look for exceptionHandlers in this case
           print(stackTrace);
-          List<MetaDataValue<ExceptionHandler>> mirrorExceptions = new MetaDataHelper<ExceptionHandler, MethodMirror>().from(obj);
+          List<MetaDataValue<ExceptionHandler>> mirrorExceptions =
+              new MetaDataHelper<ExceptionHandler, MethodMirror>().from(obj);
           mirrorExceptions.addAll(adviserExc);
 
           return _errorHandling(mirrorExceptions, model, req, e);
@@ -118,9 +145,9 @@ class ForceRegistry {
     }
   }
 
-  Model _prepareModel(Model model, List<MetaDataValue<ModelAttribute>> mirrorModels) {
+  Model _prepareModel(
+      Model model, List<MetaDataValue<ModelAttribute>> mirrorModels) {
     for (MetaDataValue mvModel in mirrorModels) {
-
       InstanceMirror res = mvModel.invoke([]);
 
       if (res != null && res.hasReflectee) {
@@ -146,23 +173,25 @@ class ForceRegistry {
     return hasResponseBody;
   }
 
-  _errorHandling(List<MetaDataValue<ExceptionHandler>> mirrorExceptions, Model model, ForceRequest req, e) {
+  _errorHandling(List<MetaDataValue<ExceptionHandler>> mirrorExceptions,
+      Model model, ForceRequest req, e) {
     if (mirrorExceptions.length == 0) {
       throw e;
     } else {
       MetaDataValue<ExceptionHandler> mdvException = null;
 
       for (MetaDataValue<ExceptionHandler> mdv in mirrorExceptions) {
-        if (mdv.object.type !=null && e.runtimeType == mdv.object.type) {
+        if (mdv.object.type != null && e.runtimeType == mdv.object.type) {
           mdvException = mdv;
         }
-        if (mdvException == null && mdv.object.type==null) {
+        if (mdvException == null && mdv.object.type == null) {
           mdvException = mdv;
         }
       }
 
-      if (mdvException!=null) {
-        List positionalArguments = _calculate_positionalArguments(mdvException, model, req, e);
+      if (mdvException != null) {
+        List positionalArguments =
+            _calculate_positionalArguments(mdvException, model, req, e);
         return _executeFunction(mdvException, positionalArguments);
       } else {
         throw e;
@@ -175,7 +204,9 @@ class ForceRegistry {
     return res.reflectee;
   }
 
-  List _calculate_positionalArguments(MetaDataValue mv, Model model, ForceRequest req, [ex_er]) {
+  List _calculate_positionalArguments(
+      MetaDataValue mv, Model model, ForceRequest req,
+      [ex_er]) {
     List positionalArguments = [];
     for (ParameterMirror pm in mv.parameters) {
       String name = (MirrorSystem.getName(pm.simpleName));
@@ -209,10 +240,12 @@ class ForceRegistry {
               RequestParam rp = im.reflectee;
               String qvalue = (rp.value == "" ? name : rp.value);
               if (req.request.uri.queryParameters[qvalue] != null) {
-                positionalArguments.add(req.request.uri.queryParameters[qvalue]);
+                positionalArguments
+                    .add(req.request.uri.queryParameters[qvalue]);
               } else {
                 if (rp.required) {
-                  throw new RequiredError("${qvalue} not found on the queryParameters");
+                  throw new RequiredError(
+                      "${qvalue} not found on the queryParameters");
                 } else {
                   positionalArguments.add(rp.defaultValue);
                 }
