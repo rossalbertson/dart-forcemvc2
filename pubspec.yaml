@@ -1,5 +1,5 @@
 name: forcemvc2
-version: 0.3.4
+version: 0.3.5
 author: Joris Hermans <hermansj@gmail.com>
 description: A serverside web mvc framework with templates (ported to Dart 2 by Ross Albertson)
 homepage: https://github.com/rossalbertson/dart-forcemvc2
