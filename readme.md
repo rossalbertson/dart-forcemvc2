@@ -15,7 +15,7 @@ First of all you need to setup a web server:
 ```dart
 library x;
 import 'package:wired2/wired2.dart';
-import 'package:forcemvc2/force_mvc2.dart';
+import 'package:forcemvc2/forcemvc2.dart';
 
 part 'controllers/x_controller.dart';
 
