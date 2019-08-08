@@ -34,7 +34,7 @@ part of x;
 @Controller
 class XController {
 
-  @RequestMapping(value: "/home", method: RequestMethod.GET)
+  @RequestMapping(value: "/home", method: "GET")
   String home(Locale locale, Model model) {
     model.addAttribute("someprop", "value" );
     
