@@ -1,7 +1,7 @@
 library dart_force_mvc_unittest_lib;
 
 import 'package:mockito/mockito.dart';
-import 'package:forcemvc2/force_mvc2.dart';
+import 'package:forcemvc2/forcemvc2.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
